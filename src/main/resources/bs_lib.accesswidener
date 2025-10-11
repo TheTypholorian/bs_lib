@@ -1,0 +1,26 @@
+accessWidener v2 named
+
+accessible field net/minecraft/resource/ResourceFinder directoryName Ljava/lang/String;
+accessible field net/minecraft/resource/ResourceFinder fileExtension Ljava/lang/String;
+
+extendable method net/minecraft/client/gl/GlUniform set (F)V
+extendable method net/minecraft/client/gl/GlUniform set (FF)V
+extendable method net/minecraft/client/gl/GlUniform set (IF)V
+extendable method net/minecraft/client/gl/GlUniform set (FFF)V
+extendable method net/minecraft/client/gl/GlUniform set (Lorg/joml/Vector3f;)V
+extendable method net/minecraft/client/gl/GlUniform set (FFFF)V
+extendable method net/minecraft/client/gl/GlUniform set (Lorg/joml/Vector4f;)V
+extendable method net/minecraft/client/gl/GlUniform setForDataType (FFFF)V
+extendable method net/minecraft/client/gl/GlUniform setForDataType (IIII)V
+extendable method net/minecraft/client/gl/GlUniform set (I)V
+extendable method net/minecraft/client/gl/GlUniform set (II)V
+extendable method net/minecraft/client/gl/GlUniform set (III)V
+extendable method net/minecraft/client/gl/GlUniform set (IIII)V
+extendable method net/minecraft/client/gl/GlUniform set ([F)V
+extendable method net/minecraft/client/gl/GlUniform set (FFFFFF)V
+extendable method net/minecraft/client/gl/GlUniform set (FFFFFFFF)V
+extendable method net/minecraft/client/gl/GlUniform set (FFFFFFFFF)V
+extendable method net/minecraft/client/gl/GlUniform set (FFFFFFFFFFFF)V
+extendable method net/minecraft/client/gl/GlUniform set (FFFFFFFFFFFFFFFF)V
+extendable method net/minecraft/client/gl/GlUniform set (Lorg/joml/Matrix4f;)V
+extendable method net/minecraft/client/gl/GlUniform set (Lorg/joml/Matrix3f;)V
