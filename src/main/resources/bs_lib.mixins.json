@@ -8,7 +8,8 @@
   ],
   "client": [
     "DrawContextMixin",
-    "GlDebugMixin"
+    "GlDebugMixin",
+    "ShaderProgramMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -2,6 +2,11 @@ accessWidener v2 named
 
 accessible field net/minecraft/resource/ResourceFinder directoryName Ljava/lang/String;
 accessible field net/minecraft/resource/ResourceFinder fileExtension Ljava/lang/String;
+accessible method net/minecraft/client/gl/ShaderStage <init> (Lnet/minecraft/client/gl/ShaderStage$Type;ILjava/lang/String;)V
+accessible method net/minecraft/client/gl/ShaderStage getGlRef ()I
+accessible field net/minecraft/client/gl/ShaderProgram samplers Ljava/util/Map;
+accessible method net/minecraft/client/gl/ShaderProgram readSampler (Lcom/google/gson/JsonElement;)V
+accessible method net/minecraft/client/gl/ShaderProgram addUniform (Lcom/google/gson/JsonElement;)V
 
 extendable method net/minecraft/client/gl/GlUniform set (F)V
 extendable method net/minecraft/client/gl/GlUniform set (FF)V

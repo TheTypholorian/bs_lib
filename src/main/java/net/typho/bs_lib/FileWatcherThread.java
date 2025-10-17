@@ -3,8 +3,6 @@ package net.typho.bs_lib;
 import com.sun.nio.file.ExtendedWatchEventModifier;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.resource.InputSupplier;
-import net.minecraft.resource.ResourceFinder;
-import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.typho.bs_lib.error.FileWatchException;
 import org.jetbrains.annotations.NotNull;
@@ -59,9 +57,9 @@ public class FileWatcherThread extends Thread {
                                     Map<Identifier, InputSupplier<InputStream>> map = null;
 
                                     if (changed.startsWith("assets")) {
-                                        map = BSLib.HOT_RELOAD_PACK.client;
+                                        map = BigShotLibClient.HOT_RELOAD_PACK.client;
                                     } else if (changed.startsWith("data")) {
-                                        map = BSLib.HOT_RELOAD_PACK.server;
+                                        map = BigShotLibClient.HOT_RELOAD_PACK.server;
                                     }
 
                                     if (map != null) {

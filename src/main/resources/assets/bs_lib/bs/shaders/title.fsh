@@ -15,5 +15,6 @@ void main() {
         discard;
     }
 
-    fragColor = color * ColorModulator;
+    fragColor = vec4(1 - color.rgb, color.a) * ColorModulator;
+    fragColor.g = 0.5;
 }

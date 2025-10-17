@@ -4,11 +4,10 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.gui.DrawContext;
-import net.typho.bs_lib.BSLib;
-import net.typho.bs_lib.BSShader;
+import net.typho.bs_lib.BigShader;
+import net.typho.bs_lib.BigShotLibClient;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.function.Supplier;
 
@@ -22,7 +21,7 @@ public class DrawContextMixin {
             )
     )
     private void setShader(Supplier<ShaderProgram> program, Operation<Void> original) {
-        BSShader shader = BSShader.get(BSLib.id("title"));
+        BigShader shader = BigShader.get(BigShotLibClient.id("title"));
 
         if (shader != null) {
             shader.bind();
