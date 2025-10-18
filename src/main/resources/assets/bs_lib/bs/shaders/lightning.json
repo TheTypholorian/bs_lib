@@ -1,0 +1,8 @@
+{
+  "format": "POSITION_COLOR",
+  "vertex": "bs_lib:lightning",
+  "fragment": "bs_lib:lightning",
+  "moj_include": [
+    "fog.glsl"
+  ]
+}

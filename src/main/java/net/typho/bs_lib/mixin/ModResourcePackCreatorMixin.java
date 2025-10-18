@@ -3,7 +3,7 @@ package net.typho.bs_lib.mixin;
 import net.fabricmc.fabric.impl.resource.loader.ModResourcePackCreator;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resource.ResourcePackProfile;
-import net.typho.bs_lib.BigShotLibClient;
+import net.typho.bs_lib.BigShotClient;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -19,7 +19,7 @@ public class ModResourcePackCreatorMixin {
     )
     private void register(Consumer<ResourcePackProfile> consumer, CallbackInfo ci) {
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
-            consumer.accept(BigShotLibClient.HOT_RELOAD_PACK_PROFILE);
+            consumer.accept(BigShotClient.HOT_RELOAD_PACK_PROFILE);
         }
     }
 }

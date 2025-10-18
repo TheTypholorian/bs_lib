@@ -26,28 +26,28 @@ import java.util.stream.Collectors;
 import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL20.*;
 
-public class BigShader implements NativeResource {
+public class NeoShader implements NativeResource {
     public static final ResourceResolver INCLUDE_RESOLVER = new ResourceResolver("bs/shaders/include", "");
     public static final ResourceResolver RESOLVER = ResourceResolver.json("bs/shaders");
     public static final ResourceResolver VERTEX_RESOLVER = new ResourceResolver(RESOLVER.directoryName, ".vsh");
     public static final ResourceResolver FRAGMENT_RESOLVER = new ResourceResolver(RESOLVER.directoryName, ".fsh");
     @ApiStatus.Internal
-    public static final Map<ShaderKey, BigShader> SHADER_LOOKUP = new HashMap<>();
+    public static final Map<ShaderKey, NeoShader> SHADER_LOOKUP = new HashMap<>();
 
-    public static BigShader get(int id) {
+    public static NeoShader get(int id) {
         return SHADER_LOOKUP.get(new ShaderKey(id));
     }
 
-    public static BigShader get(Identifier id) {
+    public static NeoShader get(Identifier id) {
         return SHADER_LOOKUP.get(new ShaderKey(id));
     }
 
-    public static BigShader getOrCreate(int gl, Identifier id, Function<ShaderKey, BigShader> func) {
+    public static NeoShader getOrCreate(int gl, Identifier id, Function<ShaderKey, NeoShader> func) {
         return SHADER_LOOKUP.computeIfAbsent(new ShaderKey(gl, id), func);
     }
 
-    public static BigShader put(BigShader shader) {
-        BigShader old = SHADER_LOOKUP.put(shader.getKey(), shader);
+    public static NeoShader put(NeoShader shader) {
+        NeoShader old = SHADER_LOOKUP.put(shader.getKey(), shader);
 
         if (old != null && shader != old) {
             old.free();
@@ -61,7 +61,7 @@ public class BigShader implements NativeResource {
     public final ShaderProgram program;
     protected final Map<String, BigUniform> uniforms = new LinkedHashMap<>();
 
-    public BigShader(Identifier id, VertexFormat format, int glId, String vertexCode, String fragmentCode) {
+    public NeoShader(Identifier id, VertexFormat format, int glId, String vertexCode, String fragmentCode) {
         key = new ShaderKey(glId, id);
         vertex = new ShaderStage(ShaderStage.Type.VERTEX, glCreateShader(GL_VERTEX_SHADER), id + "-vertex");
         fragment = new ShaderStage(ShaderStage.Type.FRAGMENT, glCreateShader(GL_FRAGMENT_SHADER), id + "-fragment");
@@ -82,13 +82,13 @@ public class BigShader implements NativeResource {
         }
 
         try {
-            program = BigShotLibClient.createProgram(id.toString(), format, glId, vertex, fragment);
+            program = BigShotClient.createProgram(id.toString(), format, glId, vertex, fragment);
         } catch (InstantiationException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public BigShader(Identifier id, VertexFormat format, String vertexCode, String fragmentCode) {
+    public NeoShader(Identifier id, VertexFormat format, String vertexCode, String fragmentCode) {
         this(id, format, glCreateProgram(), vertexCode, fragmentCode);
     }
 
@@ -102,7 +102,6 @@ public class BigShader implements NativeResource {
     }
 
     public void bind() {
-        glUseProgram(key.gl());
         RenderSystem.setShader(() -> program);
     }
 
@@ -121,7 +120,7 @@ public class BigShader implements NativeResource {
         glDeleteProgram(key.gl());
     }
 
-    public static class Resource extends BigShader {
+    public static class Resource extends NeoShader {
         public Resource(Identifier id, int glId, JsonObject json, ResourceManager manager) {
             super(id, getFormat(json.get("format")), glId, getCode(json, "vertex", VERTEX_RESOLVER, manager), getCode(json, "fragment", FRAGMENT_RESOLVER, manager));
         }
@@ -181,18 +180,42 @@ public class BigShader implements NativeResource {
         }
 
         public static String getCode(JsonObject object, String key, ResourceResolver resolver, ResourceManager manager) {
-            StringBuilder code = new StringBuilder(readCode(resolver.toResourcePath(Identifier.of(object.get(key).getAsString())), manager));
+            StringBuilder codeBuilder = new StringBuilder(readCode(resolver.toResourcePath(Identifier.of(object.get(key).getAsString())), manager));
+            int version = 150;
+
             JsonArray includeArray = object.getAsJsonArray("include");
 
             if (includeArray != null) {
                 for (JsonElement include : includeArray) {
-                    code.insert(0, readCode(INCLUDE_RESOLVER.toResourcePath(Identifier.of(include.getAsString())), manager) + "\n");
+                    codeBuilder.insert(0, readCode(INCLUDE_RESOLVER.toResourcePath(Identifier.of(include.getAsString())), manager) + "\n");
                 }
             }
 
-            System.out.println(code);
+            JsonArray mojIncludeArray = object.getAsJsonArray("moj_include");
 
-            return code.toString();
+            if (mojIncludeArray != null) {
+                for (JsonElement include : mojIncludeArray) {
+                    codeBuilder.insert(0, readCode(Identifier.of("shaders/include/" + include.getAsString()), manager) + "\n");
+                }
+            }
+
+            String code = codeBuilder.toString();
+
+            while (true) {
+                int i = code.indexOf("#version ");
+
+                if (i == -1) {
+                    break;
+                }
+
+                int nl = code.indexOf('\n', i);
+                version = Math.max(version, Integer.parseInt(code.substring(i + "#version ".length(), nl)));
+                code = code.substring(0, i) + code.substring(nl);
+            }
+
+            code = "#version " + version + "\n" + code;
+
+            return code;
         }
     }
 }

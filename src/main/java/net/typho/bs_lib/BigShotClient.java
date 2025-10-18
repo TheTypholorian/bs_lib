@@ -23,7 +23,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
-public class BigShotLibClient implements ClientModInitializer {
+public class BigShotClient implements ClientModInitializer {
     public static final String MOD_ID = "bs_lib";
 
     public static Identifier id(String path) {
@@ -83,15 +83,15 @@ public class BigShotLibClient implements ClientModInitializer {
 
             @Override
             public void reload(ResourceManager manager) {
-                BigShader.RESOLVER.findResources(manager).forEach((id, resource) -> {
-                    Identifier resId = BigShader.RESOLVER.toResourceId(id);
+                NeoShader.RESOLVER.findResources(manager).forEach((id, resource) -> {
+                    Identifier resId = NeoShader.RESOLVER.toResourceId(id);
 
                     try (BufferedReader reader = resource.getReader()) {
                         JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
 
                         RenderSystem.recordRenderCall(() -> {
                             System.out.println("Loading shader " + resId);
-                            BigShader.put(new BigShader.Resource(resId, json, manager));
+                            NeoShader.put(new NeoShader.Resource(resId, json, manager));
                         });
                     } catch (IOException e) {
                         throw new RuntimeException(e);

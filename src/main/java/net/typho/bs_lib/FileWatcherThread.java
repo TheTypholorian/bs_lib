@@ -57,9 +57,9 @@ public class FileWatcherThread extends Thread {
                                     Map<Identifier, InputSupplier<InputStream>> map = null;
 
                                     if (changed.startsWith("assets")) {
-                                        map = BigShotLibClient.HOT_RELOAD_PACK.client;
+                                        map = BigShotClient.HOT_RELOAD_PACK.client;
                                     } else if (changed.startsWith("data")) {
-                                        map = BigShotLibClient.HOT_RELOAD_PACK.server;
+                                        map = BigShotClient.HOT_RELOAD_PACK.server;
                                     }
 
                                     if (map != null) {
